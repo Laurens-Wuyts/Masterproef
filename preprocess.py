@@ -5,7 +5,7 @@ import sys
 import random
 
 
-directory = r'/home/laurens/masterproef/Data/' + sys.argv[1] + "/"
+directory = sys.argv[1] + 'Data/' + sys.argv[2] + "/"
 preprocessedDir = directory + "preprocessed/"
 
 if not os.path.exists(preprocessedDir + "Train/depth/"):

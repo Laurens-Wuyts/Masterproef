@@ -42,7 +42,7 @@ NUM_EPOCHS = 30
 INIT_LR = 1e-3
 BS = 8
 
-DATA_PATH = "/home/laurens/masterproef/Data/"
+DATA_PATH = sys.argv[1] + "Data/"
 
 infoPrint.startTime = datetime.now()
 

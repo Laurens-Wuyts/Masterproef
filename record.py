@@ -18,10 +18,10 @@ if "norec" in sys.argv:
 		print("Not recording or showing won't do anything.")
 		exit(1);
 else:
-	if len(sys.argv) > 1:
-		directory = r'/home/laurens/masterproef/Data/' + sys.argv[1] + "/"
+	if len(sys.argv) > 2:
+		directory = sys.argv[1] + 'Data/' + sys.argv[2] + "/"
 	else:
-		directory = r'/home/laurens/masterproef/Data/RealsenseTest1'
+		directory = sys.argv[1] + 'Data/RealsenseTest1'
 
 	if not os.path.exists(directory + "depth/"):
 		os.makedirs(directory + "depth/")
