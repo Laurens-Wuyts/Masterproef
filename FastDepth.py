@@ -48,8 +48,8 @@ infoPrint.startTime = datetime.now()
 
 
 infoPrint("Loading training and testing data...")
-trainPath = DATA_PATH + sys.argv[1] + "/preprocessed/Train/"
-testPath  = DATA_PATH + sys.argv[1] + "/preprocessed/Test/"
+trainPath = DATA_PATH + sys.argv[2] + "/preprocessed/Train/"
+testPath  = DATA_PATH + sys.argv[2] + "/preprocessed/Test/"
 
 (trainX, trainY) = loadSplit(trainPath)
 (testX, testY)   = loadSplit(testPath)
