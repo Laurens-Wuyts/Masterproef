@@ -19,13 +19,14 @@ from datetime import datetime
 
 def infoPrint(str):
 	diff = datetime.now() - infoPrint.startTime
-	print("\033[92m[INFO] \033[93m{0:>5} \033[0m{1}".format(diff.seconds, str))
+	print("\033[92m[INFO] \033[94m{0:>5} \033[0m{1}".format(diff.seconds, str))
 
 def loadSplit(path):
 	dep = [f for f in os.listdir(path + "depth/") if os.path.isfile(path + "depth/" + f)]
 	random.shuffle(dep)
 	inp = []
 	outp= []
+	print(dep)
 
 	for f in dep:
 		inp.append(io.imread(path + "color/" + f)) 
