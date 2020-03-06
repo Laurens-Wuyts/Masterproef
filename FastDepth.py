@@ -26,9 +26,9 @@ def loadSplit(path):
 	random.shuffle(dep)
 	inp = []
 	outp= []
-	print(dep)
 
 	for f in dep:
+		print("Loading {}...".format(f))
 		inp.append(io.imread(path + "color/" + f)) 
 		outp.append(io.imread(path + "depth/" + f, as_gray=True)) 
 
