@@ -30,7 +30,7 @@ def loadSplit(path):
 	idx = 0
 	for f in dep:
 		idx+=1
-		if idx % 10:
+		if idx % 10 == 0:
 			infoPrint("Loaded {} images...".format(idx))
 		inp.append(io.imread(path + "color/" + f)) 
 		outp.append(io.imread(path + "depth/" + f, as_gray=True)) 
