@@ -15,6 +15,7 @@ import numpy as np
 import random
 import os
 import sys
+import h5py
 from datetime import datetime
 
 def infoPrint(str):
@@ -40,6 +41,21 @@ def loadSplit(path):
 
 	return (data, output)
 
+def loadData(fn):
+	with h5py.File(fn, 'r') as f:
+		imgs   = np.array(f["images"])
+		depths = np.array(f["depths"])
+
+		indices = np.arange(imgs.shape[0])
+		np.random.shuffle(indices)
+
+		imgs   = imgs[indices]
+		depths = depths[indices]
+		i1, i2 = np.split(imgs,   [int(imgs.shape[0] * 0.75)])
+		d1, d2 = np.split(depths, [int(imgs.shape[0] * 0.75)])
+
+		return (i1, d1, i2, d2)
+
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 NUM_EPOCHS = 30
@@ -52,11 +68,13 @@ infoPrint.startTime = datetime.now()
 
 
 infoPrint("Loading training and testing data...")
-trainPath = DATA_PATH + sys.argv[2] + "/preprocessed/Train/"
-testPath  = DATA_PATH + sys.argv[2] + "/preprocessed/Test/"
+#trainPath = DATA_PATH + sys.argv[2] + "/preprocessed/Train/"
+#testPath  = DATA_PATH + sys.argv[2] + "/preprocessed/Test/"
 
-(trainX, trainY) = loadSplit(trainPath)
-(testX, testY)   = loadSplit(testPath)
+#(trainX, trainY) = loadSplit(trainPath)
+#(testX, testY)   = loadSplit(testPath)
+
+trainX, trainY, testX, testY = loadData(DATA_PATH + sys.argv[2])
 
 trainX = trainX.astype("float32") / 255.0
 trainY = trainY.astype("float32") / 255.0
