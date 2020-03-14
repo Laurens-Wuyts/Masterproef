@@ -43,13 +43,10 @@ def loadSplit(path):
 
 def loadData(fn):
 	with h5py.File(fn, 'r') as f:
-		indices = np.arange(f["images"].shape[0])
-		np.random.shuffle(indices)
-
-		imgs   = f["images"][indices]
-		depths = f["depths"][indices]
-		i1, i2 = np.split(imgs,   [int(imgs.shape[0] * 0.75)])
-		d1, d2 = np.split(depths, [int(imgs.shape[0] * 0.75)])
+		i1 = np.array(f["trainX"])
+		d1 = np.array(f["trainY"])
+		i2 = np.array(f["testX"])
+		d2 = np.array(f["testY"])
 
 		return (i1, d1, i2, d2)
 
