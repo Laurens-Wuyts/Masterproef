@@ -6,6 +6,7 @@ from FastDepthNet import FastDepthNet
 import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import TensorBoard
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 from sklearn.metrics import classification_report
 from skimage import io
@@ -52,7 +53,7 @@ def loadData(fn):
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
-NUM_EPOCHS = 30
+NUM_EPOCHS = 300
 INIT_LR = 1e-3
 BS = 8
 
@@ -92,6 +93,11 @@ model.compile(loss="mse", optimizer=opt, metrics=["accuracy"])
 infoPrint("Training network...")
 logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=logdir)
+checkpoint_callback  = ModelCheckpoint(
+	"checkpoints/cp-{epoch:03d}-{val_loss:.2f}.hdf5", 
+	monitor="val_loss", 
+	save_best_only=True, 
+	mode="max")
 
 H = model.fit(
 	x=trainX,
@@ -101,12 +107,12 @@ H = model.fit(
 	steps_per_epoch=trainX.shape[0] // BS,
 	epochs=NUM_EPOCHS,
 	verbose=1,
-	callbacks=[tensorboard_callback])
+	callbacks=[tensorboard_callback, checkpoint_callback])
 
 
 infoPrint("Evaluating network...")
 predictions = model.predict(testX, batch_size=BS)
-print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames))
+# print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames))
 
 
 infoPrint("Serializing network to '{}'...".format("output/FastDepth.model"))
