@@ -54,7 +54,6 @@ def loadData(fn):
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 NUM_EPOCHS = 300
-INIT_LR = 1e-3
 BS = 8
 
 DATA_PATH = sys.argv[1] + "Data/"
@@ -85,19 +84,19 @@ model = FastDepthNet.build()
 
 
 infoPrint("Compiling model...")
-opt = Adam(lr=INIT_LR, decay=INIT_LR / (NUM_EPOCHS * 0.5))
-model.compile(loss="mse", optimizer=opt, metrics=["accuracy"])
+model.compile(loss="mse", optimizer="adam")
 # model.summary()
-
+model.plot_model
 
 infoPrint("Training network...")
 logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=logdir)
 checkpoint_callback  = ModelCheckpoint(
-	"checkpoints/cp-{epoch:03d}-{val_loss:.2f}.hdf5", 
+	"checkpoints/fast-depth-cp.hdf5", 
 	monitor="val_loss", 
+	save_weights_only=True,
 	save_best_only=True, 
-	mode="max")
+	mode="min")
 
 H = model.fit(
 	x=trainX,
