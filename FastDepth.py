@@ -86,7 +86,6 @@ model = FastDepthNet.build()
 infoPrint("Compiling model...")
 model.compile(loss="mse", optimizer="adam")
 # model.summary()
-model.plot_model
 
 infoPrint("Training network...")
 logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
