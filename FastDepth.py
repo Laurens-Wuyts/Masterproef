@@ -44,10 +44,10 @@ def loadSplit(path):
 
 def loadData(fn):
 	with h5py.File(fn, 'r') as f:
-		i1 = np.array(f["trainX"]).transpose(0, 3, 2, 1)
-		d1 = np.array(f["trainY"]).transpose(0, 2, 1)
-		i2 = np.array(f["testX"]).transpose(0, 3, 2, 1)
-		d2 = np.array(f["testY"]).transpose(0, 2, 1)
+		i1 = np.array(f["trainX"])# .transpose(0, 3, 2, 1)
+		d1 = np.array(f["trainY"])# .transpose(0, 2, 1)
+		i2 = np.array(f["testX"])# .transpose(0, 3, 2, 1)
+		d2 = np.array(f["testY"])# .transpose(0, 2, 1)
 
 		return (i1, d1, i2, d2)
 
