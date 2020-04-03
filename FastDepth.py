@@ -54,7 +54,7 @@ def loadData(fn):
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 NUM_EPOCHS = 300
-BS = 8
+BS = 64
 
 DATA_PATH = sys.argv[1] + "Data/"
 
@@ -106,7 +106,7 @@ H = model.fit(
 	validation_data=(testX, testY),
 	steps_per_epoch=trainX.shape[0] // BS,
 	epochs=NUM_EPOCHS,
-	verbose=2,
+	verbose=1,
 	callbacks=[tensorboard_callback, checkpoint_callback])
 
 
