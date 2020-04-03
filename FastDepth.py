@@ -97,6 +97,8 @@ checkpoint_callback  = ModelCheckpoint(
 	save_best_only=True, 
 	mode="min")
 
+print("train X:", trainX.shape, "Y:", trainY.shape)
+print("test X:", testX.shape, "Y:", testY.shape)
 H = model.fit(
 	x=trainX,
 	y=trainY, 
@@ -104,7 +106,7 @@ H = model.fit(
 	validation_data=(testX, testY),
 	steps_per_epoch=trainX.shape[0] // BS,
 	epochs=NUM_EPOCHS,
-	verbose=1,
+	verbose=2,
 	callbacks=[tensorboard_callback, checkpoint_callback])
 
 
