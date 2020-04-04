@@ -93,13 +93,13 @@ model.compile(loss="mae", optimizer=sgd)
 infoPrint("Training network...")
 logdir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=logdir )
-earlystop_callback   = EarlyStopping( monitor="val_loss", patience="15" )
+earlystop_callback   = EarlyStopping( monitor="val_loss", patience=15 )
 checkpoint_callback  = ModelCheckpoint(
 	"checkpoints/{epoch}-fast-depth-cp.hdf5", 
 	monitor= "val_loss", 
 	save_weights_only = True,
 	mode   = "min",
-	period = 200 )
+	save_freq = trainX.shape[0] * 10 )
 
 print("train X:", trainX.shape, "Y:", trainY.shape)
 print("test X:", testX.shape, "Y:", testY.shape)
