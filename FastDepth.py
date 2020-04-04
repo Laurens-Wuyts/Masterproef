@@ -86,7 +86,7 @@ model = FastDepthNet.build()
 
 infoPrint("Compiling model...")
 # mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
-sgd = SGD(lr=0.01, decay=1e-4, momentum=0.9, nesterov=True)
+sgd = SGD(lr=0.0001, decay=1e-4, momentum=0.9, nesterov=True)
 model.compile(loss="mae", optimizer=sgd)
 # model.summary()
 
