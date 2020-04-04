@@ -4,7 +4,7 @@ matplotlib.use("Agg")
 from FastDepthNet import FastDepthNet
 
 import tensorflow as tf
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.callbacks import ModelCheckpoint
 
@@ -53,7 +53,7 @@ def loadData(fn):
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
-NUM_EPOCHS = 300
+NUM_EPOCHS = 150
 BS = 64
 
 DATA_PATH = sys.argv[1] + "Data/"
@@ -84,18 +84,21 @@ model = FastDepthNet.build()
 
 
 infoPrint("Compiling model...")
-model.compile(loss="mse", optimizer="adam")
+# mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
+sgd = SGD(lr=0.01, decay=1e-4, momentum=0.9, nesterov=True)
+model.compile(loss="mae", optimizer=sgd)
 # model.summary()
 
 infoPrint("Training network...")
-logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = TensorBoard(log_dir=logdir)
+logdir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = TensorBoard(log_dir=logdir )
+earlystop_callback   = EarlyStopping( monitor="val_loss", patience="15" )
 checkpoint_callback  = ModelCheckpoint(
-	"checkpoints/fast-depth-cp.hdf5", 
-	monitor="val_loss", 
-	save_weights_only=True,
-	save_best_only=True, 
-	mode="min")
+	"checkpoints/{epoch}-fast-depth-cp.hdf5", 
+	monitor= "val_loss", 
+	save_weights_only = True,
+	mode   = "min",
+	period = 200 )
 
 print("train X:", trainX.shape, "Y:", trainY.shape)
 print("test X:", testX.shape, "Y:", testY.shape)
@@ -107,7 +110,7 @@ H = model.fit(
 	# steps_per_epoch=trainX.shape[0] // BS,
 	epochs=NUM_EPOCHS,
 	verbose=1,
-	callbacks=[tensorboard_callback, checkpoint_callback])
+	callbacks=[tensorboard_callback, checkpoint_callback, earlystop_callback])
 
 
 infoPrint("Evaluating network...")
