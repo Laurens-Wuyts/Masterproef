@@ -7,6 +7,7 @@ import tensorflow as tf
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import EarlyStopping
 
 from sklearn.metrics import classification_report
 from skimage import io
