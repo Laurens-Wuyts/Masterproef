@@ -16,10 +16,7 @@ args = vars(ap.parse_args())
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
-print("[INFO] loading model...")
-model = load_model(args["path"] + args["model"])
-print("[INFO] predicting...")
-
+print("[INFO] loading images...")
 images = []
 
 random.seed()
@@ -28,6 +25,13 @@ with h5py.File(args["path"] + "Data/" + args["dataset"], 'r') as f:
 	for _ in range(5):
 		i = f["testX"][random.randint(0, f["testX"].shape[0])]
 		images.append(i)
+
+images = np.asarray(images)
+print(images.shape)
+
+print("[INFO] loading model...")
+model = load_model(args["path"] + args["model"])
+print("[INFO] predicting...")
 	
 preds = model.predict(images)
 
