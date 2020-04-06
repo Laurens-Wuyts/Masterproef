@@ -27,7 +27,7 @@ with h5py.File(args["path"] + "Data/" + args["dataset"], 'r') as f:
 		idx = random.randint(0, f["testX"].shape[0])
 		i = f["testX"][idx]
 		images.append(i)
-		d = f["testX"][idx]
+		d = f["testY"][idx]
 		depths.append(d)
 
 images = np.asarray(images)
