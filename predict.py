@@ -39,4 +39,5 @@ preds = 255 * preds
 pred_imgs = preds.astype(np.uint8)
 print(pred_imgs[0].shape)
 
-cv2.imwrite(args["path"] + "Data/predictions.jpg", np.hstack((images[0], pred_imgs[0])))
+im_pred_color = cv2.cvtColor(pred_imgs[0], cv2.GRAY2BGR)
+cv2.imwrite(args["path"] + "Data/predictions.jpg", np.hstack((images[0], im_pred_color)))
