@@ -37,6 +37,6 @@ preds = model.predict(images)
 
 preds = 255 * preds
 pred_imgs = preds.astype(np.uint8)
-print(pred_imgs[0])
+print(pred_imgs[0].shape)
 
 cv2.imwrite(args["path"] + "Data/predictions.jpg", pred_imgs[0])
