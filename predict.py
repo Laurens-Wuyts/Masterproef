@@ -35,4 +35,6 @@ print("[INFO] predicting...")
 	
 preds = model.predict(images)
 
+print(preds[0])
+
 cv2.imwrite(args["path"] + "Data/predictions.jpg", preds[0])
