@@ -35,6 +35,8 @@ print("[INFO] predicting...")
 	
 preds = model.predict(images)
 
-print(preds[0])
+preds = 255 * preds
+pred_imgs = preds.astype(np.uint8)
+print(pred_imgs[0])
 
-cv2.imwrite(args["path"] + "Data/predictions.jpg", preds[0])
+cv2.imwrite(args["path"] + "Data/predictions.jpg", pred_imgs[0])
