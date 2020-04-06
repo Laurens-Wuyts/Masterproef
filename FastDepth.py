@@ -54,7 +54,7 @@ def loadData(fn):
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
-NUM_EPOCHS = 150
+NUM_EPOCHS = 500
 BS = 64
 
 DATA_PATH = sys.argv[1] + "Data/"
