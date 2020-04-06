@@ -45,11 +45,12 @@ pred_imgs = preds.astype(np.uint8)
 print(pred_imgs.shape)
 
 im_preds_color = np.stack((np.squeeze(pred_imgs),)*3, axis=-1)
+depths_color = np.stack((np.squeeze(depths),)*3, axis=-1)
 print(im_preds_color.shape, images.shape)
 image = None
 
 for i in range(images.shape[0]):
-	temp = np.hstack((images[i], depths[i], im_preds_color[i]))
+	temp = np.hstack((images[i], depths_color[i], im_preds_color[i]))
 	if image is None:
 		image = temp.copy()
 	else:
