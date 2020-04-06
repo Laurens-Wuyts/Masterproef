@@ -41,10 +41,13 @@ print(pred_imgs.shape)
 
 im_preds_color = np.stack((np.squeeze(pred_imgs),)*3, axis=-1)
 print(im_preds_color.shape, images.shape)
-image = []
+image = None
 
 for i in range(images.shape[0]):
 	temp = np.hstack((images[i], im_preds_color[i]))
-	image = np.vstack((image, temp))
+	if image is None:
+		image = temp.copy()
+	else:
+		image = np.vstack((image, temp))
 
 cv2.imwrite(args["path"] + "Data/predictions.jpg", image)
