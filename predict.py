@@ -41,4 +41,10 @@ print(pred_imgs.shape)
 
 im_preds_color = np.stack((np.squeeze(pred_imgs),)*3, axis=-1)
 print(im_preds_color.shape, images.shape)
-cv2.imwrite(args["path"] + "Data/predictions.jpg", np.hstack((images[0], im_pred_color[0])))
+image = []
+
+for i in range(images.shape[0]):
+	temp = np.hstack((images[i], im_preds_color[i]))
+	image = np.vstack((image, temp))
+
+cv2.imwrite(args["path"] + "Data/predictions.jpg", image)
