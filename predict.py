@@ -18,15 +18,20 @@ os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 print("[INFO] loading images...")
 images = []
+depths = []
 
 random.seed()
 
 with h5py.File(args["path"] + "Data/" + args["dataset"], 'r') as f:
 	for _ in range(5):
-		i = f["testX"][random.randint(0, f["testX"].shape[0])]
+		idx = random.randint(0, f["testX"].shape[0])
+		i = f["testX"][idx]
 		images.append(i)
+		d = f["testX"][idx]
+		depths.append(d)
 
 images = np.asarray(images)
+depths = np.asarray(depths)
 print(images.shape)
 
 print("[INFO] loading model...")
@@ -44,7 +49,7 @@ print(im_preds_color.shape, images.shape)
 image = None
 
 for i in range(images.shape[0]):
-	temp = np.hstack((images[i], im_preds_color[i]))
+	temp = np.hstack((images[i], depths[i], im_preds_color[i]))
 	if image is None:
 		image = temp.copy()
 	else:
