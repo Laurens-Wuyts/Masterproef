@@ -52,6 +52,7 @@ def loadData(fn):
 
 		return (i1, d1, i2, d2)
 
+
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 NUM_EPOCHS = 500
@@ -85,9 +86,9 @@ model = FastDepthNet.build()
 
 
 infoPrint("Compiling model...")
-# mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
 sgd = SGD(lr=0.0001, decay=1e-4, momentum=0.9, nesterov=True)
-model.compile(loss="mae", optimizer=sgd)
+# mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
+model.compile(loss="mae", optimizer=sgd, metrics=["accuracy"])
 # model.summary()
 
 infoPrint("Training network...")
