@@ -112,6 +112,7 @@ checkpoint_callback  = ModelCheckpoint(
 H = model.fit(
 	x 				= train_ds,
 	validation_data	= test_ds,
+	validation_steps= 20,
 	epochs 			= NUM_EPOCHS,
 	verbose 		= 1,
 	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])
