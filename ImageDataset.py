@@ -30,7 +30,7 @@ def process_path(path):
 
 	return img, dep
 
-def prepare_for_training(ds, cache, shuffle_buffer_size=1000, batch_size=64):
+def prepare_for_training(ds, shuffle_buffer_size=1000, batch_size=64):
 	ds = ds.shuffle(buffer_size=shuffle_buffer_size)
 	ds = ds.map(process_path, num_parallel_calls=AUTOTUNE)
 	ds = ds.repeat()
