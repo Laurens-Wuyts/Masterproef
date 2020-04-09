@@ -26,7 +26,7 @@ def process_path(path):
 	img = tf.io.read_file(path)
 	img = decode_image(img, 3)
 	dep = tf.io.read_file(depth_path)
-	dep = tf.squeeze(decode_image(dep, 1))
+	dep = decode_image(dep, 1)
 
 	return img, dep
 
