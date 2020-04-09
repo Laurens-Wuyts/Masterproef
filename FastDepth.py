@@ -9,10 +9,10 @@ from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import EarlyStopping
 
-from sklearn.metrics import classification_report
+from ImageDataset import Load_Dataset
+
 from skimage import io
 
-import matplotlib.pyplot as plt
 import numpy as np
 import random
 import os
@@ -53,7 +53,7 @@ def loadData(fn):
 		return (i1, d1, i2, d2)
 
 
-os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 NUM_EPOCHS = 200
 BS = 64
@@ -70,26 +70,24 @@ infoPrint("Loading training and testing data...")
 #(trainX, trainY) = loadSplit(trainPath)
 #(testX, testY)   = loadSplit(testPath)
 
-trainX, trainY, testX, testY = loadData(DATA_PATH + sys.argv[2])
+#trainX, trainY, testX, testY = loadData(DATA_PATH + sys.argv[2])
 
-trainX = trainX.astype("float32") / 255.0
-trainY = trainY.astype("float32") / 255.0
-testX  = testX.astype("float32") / 255.0
-testY  = testY.astype("float32") / 255.0
+#trainX = trainX.astype("float32") / 255.0
+#trainY = trainY.astype("float32") / 255.0
+#testX  = testX.astype("float32") / 255.0
+#testY  = testY.astype("float32") / 255.0
 
-print(trainX.shape)
-print(trainY.shape)
-
+#print(trainX.shape)
+#print(trainY.shape)
+train_ds = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", BS)
+test_ds  = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", BS)
 
 infoPrint("Building model...")
 model = FastDepthNet.build()
 
-
 infoPrint("Compiling model...")
 sgd = SGD(lr=0.0001, decay=1e-4, momentum=0.9, nesterov=True)
-# mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
-model.compile(loss="mae", optimizer=sgd, metrics=["accuracy"])
-# model.summary()
+model.compile(loss="mae", optimizer=sgd, metrics=["accuracy"]) # mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
 
 infoPrint("Training network...")
 logdir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -99,39 +97,29 @@ checkpoint_callback  = ModelCheckpoint(
 	"checkpoints/{epoch}-fast-depth-cp.hdf5", 
 	monitor= "val_loss", 
 	save_weights_only = True,
-	mode   = "min",
-	save_freq = trainX.shape[0] * 10 )
+	mode   = "min" )
 
-print("train X:", trainX.shape, "Y:", trainY.shape)
-print("test X:", testX.shape, "Y:", testY.shape)
+# H = model.fit(
+# 	x=trainX,
+# 	y=trainY, 
+# 	batch_size=BS,
+# 	validation_data=(testX, testY),
+# 	# steps_per_epoch=trainX.shape[0] // BS,
+# 	epochs=NUM_EPOCHS,
+# 	verbose=1,
+# 	callbacks=[tensorboard_callback, checkpoint_callback, earlystop_callback])
+
 H = model.fit(
-	x=trainX,
-	y=trainY, 
-	batch_size=BS,
-	validation_data=(testX, testY),
-	# steps_per_epoch=trainX.shape[0] // BS,
-	epochs=NUM_EPOCHS,
-	verbose=1,
-	callbacks=[tensorboard_callback, checkpoint_callback, earlystop_callback])
+	x 				= train_ds,
+	validation_data	= test_ds,
+	epochs 			= NUM_EPOCHS,
+	verbose 		= 1,
+	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])
+
 
 
 infoPrint("Evaluating network...")
 predictions = model.predict(testX, batch_size=BS)
-# print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames))
-
 
 infoPrint("Serializing network to '{}'...".format("output/FastDepth.model"))
 model.save("output/FastDepth.model")
-# 
-# N = np.arange(0, NUM_EPOCHS)
-# plt.style.use("ggplot")
-# plt.figure()
-# plt.plot(N, H.history["loss"], label="train_loss")
-# plt.plot(N, H.history["val_loss"], label="val_loss")
-# plt.plot(N, H.history["accuracy"], label="train_acc")
-# plt.plot(N, H.history["val_accuracy"], label="val_acc")
-# plt.title("Training Loss and Accuracy on Dataset")
-# plt.xlabel("Epoch #")
-# plt.ylabel("Loss/Accuracy")
-# plt.legend(loc="lower left")
-# plt.savefig("output/graph.png")
