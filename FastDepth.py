@@ -100,10 +100,11 @@ logdir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=logdir )
 earlystop_callback   = EarlyStopping( monitor="val_loss", patience=15 )
 checkpoint_callback  = ModelCheckpoint(
-	"checkpoints/{epoch}-fast-depth-cp.hdf5", 
+	"checkpoints/{epoch}-fast-depth-cp.h5", 
 	monitor= "val_loss", 
 	save_weights_only = True,
-	mode   = "min" )
+	mode   = "min",
+	period = 10 )
 
 if checkpoint:
 	latest = tf.train.latest_checkpoint("checkpoints/")
