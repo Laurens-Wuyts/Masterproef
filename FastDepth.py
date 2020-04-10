@@ -83,11 +83,8 @@ infoPrint("Loading training and testing data...")
 #testX  = testX.astype("float32") / 255.0
 #testY  = testY.astype("float32") / 255.0
 
-#train_ds = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", BS)
-#test_ds  = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", BS)
-
-train_ds = Load_Dummy_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", "366.jpg", BS)
-test_ds  = Load_Dummy_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", "365.jpg",BS)
+train_ds = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", BS)
+test_ds  = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", BS)
 
 infoPrint("Building model...")
 model = FastDepthNet.build()
