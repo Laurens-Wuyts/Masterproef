@@ -63,7 +63,7 @@ DATA_PATH = sys.argv[1] + "Data/"
 
 
 checkpoint = False
-if len(sys.argv) > 2:
+if len(sys.argv) > 3:
 	checkpoint = True
 
 infoPrint.startTime = datetime.now()
