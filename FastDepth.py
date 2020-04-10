@@ -61,6 +61,11 @@ BS = 64
 
 DATA_PATH = sys.argv[1] + "Data/"
 
+
+checkpoint = False
+if sys.argc > 2:
+	checkpoint = True
+
 infoPrint.startTime = datetime.now()
 
 
@@ -100,6 +105,12 @@ checkpoint_callback  = ModelCheckpoint(
 	save_weights_only = True,
 	mode   = "min" )
 
+if checkpoint:
+	latest = tf.train.latest_checkpoint("checkpoints")
+	model.load_weights(latest)
+	first_epoch = int(latest.split("-")[0])
+	print(first_epoch)
+
 # H = model.fit(
 # 	x=trainX,
 # 	y=trainY, 
@@ -121,8 +132,8 @@ H = model.fit(
 
 
 
-infoPrint("Evaluating network...")
-predictions = model.predict(testX, batch_size=BS)
+# infoPrint("Evaluating network...")
+# predictions = model.predict(testX, batch_size=BS)
 
 infoPrint("Serializing network to '{}'...".format("output/FastDepth.model"))
 model.save("output/FastDepth.model")
