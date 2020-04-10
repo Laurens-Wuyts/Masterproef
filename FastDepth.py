@@ -10,7 +10,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import EarlyStopping
 
 from ImageDataset import Load_Dataset
-from ImageDataset import time_it
+from ImageDataset import Load_Dummy_Dataset
 
 from skimage import io
 
