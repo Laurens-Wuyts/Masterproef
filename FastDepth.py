@@ -106,7 +106,8 @@ checkpoint_callback  = ModelCheckpoint(
 	mode   = "min" )
 
 if checkpoint:
-	latest = tf.train.latest_checkpoint("checkpoints")
+	latest = tf.train.latest_checkpoint("checkpoints/")
+	print(latest)
 	model.load_weights(latest)
 	first_epoch = int(latest.split("-")[0])
 	print(first_epoch)
