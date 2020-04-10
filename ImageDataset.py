@@ -30,8 +30,8 @@ def process_path(path):
 
 	return img, dep
 
-def process_path_dummy(path):
-	path = tf.strings.regex_replace(path, "\d*\.jpg", "366.jpg")
+def process_path_dummy(path, file):
+	path = tf.strings.regex_replace(path, "\d*\.jpg", file)
 	depth_path = get_depth_path(path)
 	img = tf.io.read_file(path)
 	img = decode_image(img, 3)
@@ -49,8 +49,8 @@ def prepare_for_training(ds, shuffle_buffer_size=1000, batch_size=64):
 
 	return ds
 
-def prepare_dummy_for_training(ds, shuffle_buffer_size=1000, batch_size=64):
-	ds = ds.map(process_path_dummy, num_parallel_calls=AUTOTUNE)
+def prepare_dummy_for_training(ds, shuffle_buffer_size=1000, batch_size=64, file=None):
+	ds = ds.map(lambda path: process_path_dummy(path, file), num_parallel_calls=AUTOTUNE)
 	ds = ds.repeat()
 	ds = ds.batch(batch_size)
 	ds = ds.prefetch(buffer_size=AUTOTUNE)
@@ -78,7 +78,7 @@ def Load_Dataset(path, batch_size):
 	list_ds = tf.data.Dataset.list_files(str(folder/'*'))
 	return prepare_for_training(list_ds, batch_size=batch_size)
 
-def Load_Dummy_Dataset(path, batch_size):
+def Load_Dummy_Dataset(path, file, batch_size):
 	folder = pathlib.Path(path)
 	list_ds = tf.data.Dataset.list_files(str(folder/'*'))
-	return prepare_dummy_for_training(list_ds, batch_size=batch_size)
+	return prepare_dummy_for_training(list_ds, batch_size=batch_size, file=file)

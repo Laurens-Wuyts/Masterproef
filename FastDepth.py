@@ -86,8 +86,8 @@ infoPrint("Loading training and testing data...")
 #train_ds = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", BS)
 #test_ds  = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", BS)
 
-train_ds = Load_Dummy_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", BS)
-test_ds  = Load_Dummy_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", BS)
+train_ds = Load_Dummy_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", "366.jpg", BS)
+test_ds  = Load_Dummy_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", "365.jpg",BS)
 
 infoPrint("Building model...")
 model = FastDepthNet.build()
