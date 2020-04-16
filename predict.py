@@ -38,8 +38,8 @@ print("[INFO] loading images...")
 
 test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
 for i, d in test_ds:
-	color_inp = i.as_numpy()
-	depth_inp = d.as_numpy()
+	color_inp = i.numpy()
+	depth_inp = d.numpy()
 	print(color_inp.shape, depth_inp.shape)
 
 print("[INFO] loading model...")
