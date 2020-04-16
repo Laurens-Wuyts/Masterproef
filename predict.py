@@ -20,22 +20,6 @@ args = vars(ap.parse_args())
 DATA_PATH = args["path"] + "Data/"
 
 print("[INFO] loading images...")
-# images = []
-# depths = []
-# 
-# random.seed()
-# 
-# for _ in range(5):
-# 	idx = random.randint(0, f["testX"].shape[0])
-# 	i = f["testX"][idx]
-# 	images.append(i)
-# 	d = f["testY"][idx]
-# 	depths.append(d)
-# 
-# images = np.asarray(images)
-# depths = np.asarray(depths)
-# print(images.shape)
-
 test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
 for i, d in test_ds:
 	color_inp = i.numpy()
@@ -46,13 +30,6 @@ model = load_model(args["model"])
 
 print("[INFO] predicting...")
 preds = model.predict(color_inp)
-
-#preds = 255 * preds
-#pred_imgs = preds.astype(np.uint8)
-#print(pred_imgs.shape)
-
-#im_preds_color = np.stack((np.squeeze(pred_imgs),)*3, axis=-1)
-#print(im_preds_color.shape, images.shape)
 
 print("[INFO] visualising...")
 image = None
@@ -70,4 +47,4 @@ for idx in range(len(color_inp)):
 	else:
 		image = np.vstack((image, temp))
 
-cv2.imwrite(args["path"] + "Data/predictions.jpg", image)
+cv2.imwrite(args["path"] + "Data/predictions.jpg", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
