@@ -18,7 +18,6 @@ ap.add_argument("-d", "--dataset", required=True, help="path to preprocessed dat
 args = vars(ap.parse_args())
 
 DATA_PATH = args["path"] + "Data/"
-BS = 64
 
 print("[INFO] loading images...")
 # images = []
@@ -36,7 +35,7 @@ print("[INFO] loading images...")
 # images = np.asarray(images)
 # depths = np.asarray(depths)
 # print(images.shape)
-test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", BS).unbatch().take(5)
+test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).unbatch().take(1)
 
 
 print("[INFO] loading model...")
