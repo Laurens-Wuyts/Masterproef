@@ -12,6 +12,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 from ImageDataset import Load_Dataset
 from ImageDataset import Load_Dummy_Dataset
 
+from utils import infoPrint
+
 from skimage import io
 
 import numpy as np
@@ -20,10 +22,6 @@ import os
 import sys
 import h5py
 from datetime import datetime
-
-def infoPrint(str):
-	diff = datetime.now() - infoPrint.startTime
-	print("\033[92m[INFO] \033[94m{0:>5} \033[0m{1}".format(diff.seconds, str))
 
 def loadSplit(path):
 	dep = [f for f in os.listdir(path + "depth/") if os.path.isfile(path + "depth/" + f)]

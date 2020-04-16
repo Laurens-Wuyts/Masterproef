@@ -10,6 +10,9 @@ import cv2
 import os
 
 from ImageDataset import Load_Dataset
+from utils import infoPrint
+
+from datetime import datetime
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--path",    required=True, help="path to root of project")
@@ -19,19 +22,21 @@ args = vars(ap.parse_args())
 
 DATA_PATH = args["path"] + "Data/"
 
-print("[INFO] loading images...")
+infoPrint.startTime = datetime.now()
+
+infoPrint("loading images...")
 test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
 for i, d in test_ds:
 	color_inp = i.numpy()
 	depth_inp = d.numpy()
 
-print("[INFO] loading model...")
+infoPrint("loading model...")
 model = load_model(args["model"])
 
-print("[INFO] predicting...")
+infoPrint("predicting...")
 preds = model.predict(color_inp)
 
-print("[INFO] visualising...")
+infoPrint("visualising...")
 image = None
 
 for idx in range(len(color_inp)):
