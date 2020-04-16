@@ -1,13 +1,9 @@
 import tensorflow as tf
 
 from tensorflow.keras.models import load_model
-from skimage import io
-from imutils import paths
 import numpy as np
 import argparse
-import random
 import cv2
-import os
 
 from ImageDataset import Load_Dataset
 from utils import infoPrint
@@ -52,4 +48,4 @@ for idx in range(len(color_inp)):
 	else:
 		image = np.vstack((image, temp))
 
-cv2.imwrite(args["path"] + "Data/predictions.jpg", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+cv2.imwrite(DATA_PATH + "predictions.jpg", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
