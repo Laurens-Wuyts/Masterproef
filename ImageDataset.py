@@ -11,9 +11,6 @@ import time
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
-def _bytes_feature(val):
-	return tf.train.Feature(bytes_list=tf.train.BytesList(value=[val]))
-
 def get_depth_path(path):
 	return tf.strings.regex_replace(path, "color", "depth")
 

@@ -126,7 +126,7 @@ H = model.fit(
 	validation_data	= test_ds,
 	validation_steps= 20,
 	epochs 			= NUM_EPOCHS,
-	steps_per_epoch = 128,
+	steps_per_epoch = 318,
 	verbose 		= 1,
 	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])
 

@@ -21,7 +21,7 @@ else:
 	if len(sys.argv) > 2:
 		directory = sys.argv[1] + 'Data/' + sys.argv[2] + "/"
 	else:
-		directory = sys.argv[1] + 'Data/RealsenseTest1'
+		directory = sys.argv[1] + 'Data/RealsenseTest/'
 
 	if not os.path.exists(directory + "depth/"):
 		os.makedirs(directory + "depth/")
