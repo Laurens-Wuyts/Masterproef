@@ -19,7 +19,6 @@ def decode_image(img, ch):
 	return tf.image.convert_image_dtype(img, tf.float32)
 
 def process_path(path):
-	tf.print(path)
 	depth_path = get_depth_path(path)
 	img = tf.io.read_file(path)
 	img = decode_image(img, 3)

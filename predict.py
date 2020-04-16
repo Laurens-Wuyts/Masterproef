@@ -40,7 +40,6 @@ test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color"
 for i, d in test_ds:
 	color_inp = i.numpy()
 	depth_inp = d.numpy()
-	print(color_inp.shape, depth_inp.shape)
 
 print("[INFO] loading model...")
 model = load_model(args["model"])
@@ -64,7 +63,7 @@ for idx in range(len(color_inp)):
 	tmp_i    = tf.image.convert_image_dtype(color_inp[idx], tf.uint8)
 	tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
 	tmp_d    = np.stack((np.squeeze(tmp_d),)*3, axis=-1)
-	print(idx, tmp_i.shape, tmp_d.shape, tmp_pred.shape)
+
 	temp = np.hstack((tmp_i, tmp_d, tmp_pred))
 	if image is None:
 		image = temp.copy()
