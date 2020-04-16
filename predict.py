@@ -56,11 +56,13 @@ image = None
 for i, d in test_ds:
 	for idx in range(len(i)):
 		tmp_pred = tf.image.convert_image_dtype(preds[idx], tf.uint8)
+		tmp_d    = tf.image.convert_image_dtype(d[idx], tf.uint8)
+		tmp_i    = tf.image.convert_image_dtype(i[idx], tf.uint8)
 		tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
-		tmp_d = np.stack((np.squeeze(d[idx]),)*3, axis=-1)
+		tmp_d    = np.stack((np.squeeze(d[idx]),)*3, axis=-1)
 
-		print(idx, i[idx].shape, tmp_d.shape, tmp_pred.shape)
-		temp = np.hstack((i[idx], tmp_d, tmp_pred))
+		print(idx, tmp_i.shape, tmp_d.shape, tmp_pred.shape)
+		temp = np.hstack((tmp_i, tmp_d, tmp_pred))
 		if image is None:
 			image = temp.copy()
 		else:
