@@ -52,15 +52,17 @@ preds = model.predict(test_ds)
 #print(im_preds_color.shape, images.shape)
 #image = None
 
-for idx, (i, d) in enumerate(test_ds):
-	tmp_pred = tf.image.convert_image_dtype(preds[idx], tf.uint8)
-	tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
-	d = np.stack((np.squeeze(d),)*3, axis=-1)
-	print(idx, i.shape, d.shape, tmp_pred.shape)
-#	temp = np.hstack((i, d, im_preds_color[i]))
-#	if image is None:
-#		image = temp.copy()
-#	else:
-#		image = np.vstack((image, temp))
+for i, d in test_ds:
+	for idx in range(len(i)):
+		tmp_pred = tf.image.convert_image_dtype(preds[idx], tf.uint8)
+		tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
+		tmp_d = np.stack((np.squeeze(d[idx]),)*3, axis=-1)
 
-#cv2.imwrite(args["path"] + "Data/predictions.jpg", image)
+		print(idx, i[idx].shape, tmp_d.shape, tmp_pred.shape)
+		temp = np.hstack((i[idx], tmp_d, tmp_pred))
+		if image is None:
+			image = temp.copy()
+		else:
+			image = np.vstack((image, temp))
+
+cv2.imwrite(args["path"] + "Data/predictions.jpg", image)
