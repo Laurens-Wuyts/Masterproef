@@ -56,7 +56,7 @@ for idx, (i, d) in enumerate(test_ds):
 	tmp_pred = tf.image.convert_image_dtype(preds[idx], tf.uint8)
 	tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
 	d = np.stack((np.squeeze(d),)*3, axis=-1)
-	print(idx, i.shape, d.shape, tmp_pred.shape())
+	print(idx, i.shape, d.shape, tmp_pred.shape)
 #	temp = np.hstack((i, d, im_preds_color[i]))
 #	if image is None:
 #		image = temp.copy()
