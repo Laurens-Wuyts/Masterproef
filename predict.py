@@ -50,7 +50,8 @@ preds = model.predict(test_ds)
 
 #im_preds_color = np.stack((np.squeeze(pred_imgs),)*3, axis=-1)
 #print(im_preds_color.shape, images.shape)
-#image = None
+
+image = None
 
 for i, d in test_ds:
 	for idx in range(len(i)):
