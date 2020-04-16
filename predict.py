@@ -35,7 +35,7 @@ print("[INFO] loading images...")
 # images = np.asarray(images)
 # depths = np.asarray(depths)
 # print(images.shape)
-test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).unbatch().take(1)
+test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
 
 
 print("[INFO] loading model...")
