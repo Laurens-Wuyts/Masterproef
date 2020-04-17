@@ -34,7 +34,7 @@ infoPrint.startTime = datetime.now()
 
 # Load the training and testing data in two separate TensorFlow datasets
 infoPrint("Loading training and testing data...")
-train_ds = Load_Dataset(agrs.path + "/preprocessed/Train/color", args.batch_size)
+train_ds = Load_Dataset(args.path + "/preprocessed/Train/color", args.batch_size)
 test_ds  = Load_Dataset(args.path + "/preprocessed/Test/color",  args.batch_size)
 
 # Build the layers of the network
