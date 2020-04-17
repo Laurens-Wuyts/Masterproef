@@ -27,7 +27,7 @@ ap.add_argument("-b", "--batch_size",   required=False, help="Size of a batch", 
 ap.add_argument("-e", "--epochs",  		required=False, help="Maximum number of epochs", 	default=200,	type=int)
 ap.add_argument("-l", "--learning_rate",required=False, help="Learning rate of the network",default=0.001,	type=float)
 ap.add_argument("-c", "--checkpoint",  	required=False, help="Start from checkpoint",	 	default="0",	const="1",	nargs="?")
-args, _ = ap.parse_args()
+args, _ = ap.parse_known_args()
 
 # Initialise the start time of the debug messages
 infoPrint.startTime = datetime.now()
