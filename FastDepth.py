@@ -4,9 +4,8 @@ matplotlib.use("Agg")
 # Import the network model from FastDepthNet.py
 from FastDepthNet import FastDepthNet
 
-# Import the dataset loader from ImageDataset.ŷ
+# Import the dataset loader from ImageDataset.py
 from ImageDataset import Load_Dataset
-from ImageDataset import Load_Dummy_Dataset
 
 # Import a logger from utils.py
 from utils import infoPrint
@@ -18,27 +17,25 @@ from tensorflow.keras.callbacks  import TensorBoard
 from tensorflow.keras.callbacks  import ModelCheckpoint
 from tensorflow.keras.callbacks  import EarlyStopping
 
-import sys
+import argparse
 from datetime import datetime
 
-NUM_EPOCHS = 200	# Maximum number of times to run the network
-BS = 64				# Batch size of the dataset
-
-DATA_PATH = sys.argv[1] + "Data/"	# Path to the datasets
-
-
-# Check if it needs to start from a checkpoint
-checkpoint = False
-if len(sys.argv) > 3:
-	checkpoint = True
+ap = argparse.ArgumentParser()
+ap.add_argument("path",	 nargs=1,	  	help="Path to the dataset")
+ap.add_argument("-o", "--output", 	 	required=False, help="Path to save the model",	 	default="FastDepth.model")
+ap.add_argument("-b", "--batch_size",   required=False, help="Size of a batch", 		 	default=64,	type=int)
+ap.add_argument("-e", "--epochs",  		required=False, help="Maximum number of epochs", 	default=200,	type=int)
+ap.add_argument("-l", "--learning_rate",required=False, help="Learning rate of the network",default=0.001,	type=float)
+ap.add_argument("-c", "--checkpoint",  	required=False, help="Start from checkpoint",	 	default="0",	const="1",	nargs="?")
+args, _ = ap.parse_args()
 
 # Initialise the start time of the debug messages
 infoPrint.startTime = datetime.now()
 
 # Load the training and testing data in two separate TensorFlow datasets
 infoPrint("Loading training and testing data...")
-train_ds = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Train/color", BS)
-test_ds  = Load_Dataset(DATA_PATH + sys.argv[2] + "/preprocessed/Test/color", BS)
+train_ds = Load_Dataset(agrs.path + "/preprocessed/Train/color", args.batch_size)
+test_ds  = Load_Dataset(args.path + "/preprocessed/Test/color",  args.batch_size)
 
 # Build the layers of the network
 infoPrint("Building model...")
@@ -46,7 +43,7 @@ model = FastDepthNet.build()
 
 # Compile the model with a specific optimizer and loss function
 infoPrint("Compiling model...")
-sgd = SGD(lr=0.0001, decay=1e-4, momentum=0.9, nesterov=True)
+sgd = SGD(lr=args.learning_rate, decay=1e-4, momentum=0.9, nesterov=True)
 model.compile(loss="mae", optimizer=sgd, metrics=["accuracy"]) # mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
 
 # Training of the actual network
@@ -66,11 +63,11 @@ H = model.fit(
 	x 				= train_ds,		# The dataset with the training images
 	validation_data	= test_ds,		# The dataset with the validation images
 	validation_steps= 20,			# Validate 20 batches per epoch
-	epochs 			= NUM_EPOCHS,	# Run for a maximum of NUM_EPOCHS
+	epochs 			= args.epochs,	# Run for a maximum of args.epochs
 	steps_per_epoch = 318,			# Run 318 batches of data every epoch
 	verbose 		= 1,			# Print a lot of debug info
 	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])	# Load al the different callbacks
 
 # Save the network for later use
 infoPrint("Serializing network to '{}'...".format("output/FastDepth.model"))
-model.save("output/FastDepth.model")
+model.save("output/" + args.output)
