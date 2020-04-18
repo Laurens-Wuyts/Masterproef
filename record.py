@@ -3,36 +3,37 @@ import numpy as np
 import cv2
 import os
 import sys
+import argparse
 
 save = True
 show = True
 
-if "noshow" in sys.argv:
-	show = False
-	sys.argv.remove("noshow")
+ap = argparse.ArgumentParser()
+ap.add_argument("-o", "--output", 	required=False, help="Path to save the images")
+ap.add_argument(	  "--noshow",   required=False, help="Don't show live view", 	action="store_true", default=False)
+ap.add_argument(	  "--norec",  	required=False, help="Don't Record output", 	action="store_true", default=False)
+args, _ = ap.parse_known_args()
 
-if "norec" in sys.argv:
-	save = False
-	sys.argv.remove("norec")
-	if not show:
-		print("Not recording or showing won't do anything.")
-		exit(1);
-else:
-	if len(sys.argv) > 2:
-		directory = sys.argv[1] + 'Data/' + sys.argv[2] + "/"
-	else:
-		directory = sys.argv[1] + 'Data/RealsenseTest/'
 
-	if not os.path.exists(directory + "depth/"):
-		os.makedirs(directory + "depth/")
-	if not os.path.exists(directory + "color/"):
-		os.makedirs(directory + "color/")
+if args.noshow and args.norec:
+	print("Not recording or showing won't do anything.")
+	exit()
 
-	dep = [f for f in os.listdir(directory + "depth/") if os.path.isfile(directory + "depth/" + f)]
+if not args.norec:
+	if args.output is None:
+		print("Should define a output folder (-o) when recording.")
+		exit()
+
+	if not os.path.exists(args.output + "depth/"):
+		os.makedirs(args.output + "depth/")
+	if not os.path.exists(args.output + "color/"):
+		os.makedirs(args.output + "color/")
+
+	dep = [f for f in os.listdir(args.output + "depth/") if os.path.isfile(args.output + "depth/" + f)]
 	idx = len(dep)
 	start = idx + 1
 
-print("Rec: %r | Show: %r" % (save, show))
+print("Rec: %r | Show: %r" % (not args.norec, not args.noshow))
 
 # Configure depth and color streams
 pipeline = rs.pipeline()
@@ -56,7 +57,7 @@ try:
 		depth_image = cv2.convertScaleAbs(np.asanyarray(depth_frame.get_data()), alpha=0.03)
 		color_image = np.asanyarray(color_frame.get_data())
 
-		if show:
+		if not args.noshow:
 			depth_scale = cv2.resize(depth_image, (640, 360))
 			# Apply colormap on depth image (image must be converted to 8-bit per pixel first)
 			depth_colormap = cv2.applyColorMap(depth_scale, cv2.COLORMAP_JET)
@@ -70,14 +71,14 @@ try:
 			cv2.imshow('RealSense', images)
 			cv2.waitKey(1)
 
-		if save:
+		if not args.norec:
 			idx += 1
-			cv2.imwrite(directory + "color/" + str(idx) + ".jpg", color_image)
-			cv2.imwrite(directory + "depth/" + str(idx) + ".jpg", depth_image)
+			cv2.imwrite(args.output + "color/" + str(idx) + ".jpg", color_image)
+			cv2.imwrite(args.output + "depth/" + str(idx) + ".jpg", depth_image)
 
 finally:
-	if save:
-		f = open(directory + "shot_frames.txt", "a")
+	if not args.norec:
+		f = open(args.output + "shot_frames.txt", "a")
 		f.write(str(start) + " - " + str(idx) + "\r\n");
 		f.close()
 	# Stop streaming

@@ -19,8 +19,7 @@ args, _ = ap.parse_known_args()
 infoPrint.startTime = datetime.now()
 
 infoPrint("loading images...")
-test_len, test_ds  = Load_Dataset(args.dataset + "/preprocessed/Test/color", args.batch).take(1)
-
+_, test_ds  = Load_Dataset(args.dataset + "/preprocessed/Test/color", args.batch).take(1)
 color_inp, depth_inp = [i.numpy(), d.numpy() for i, d in test_ds]
 
 #for i, d in test_ds:
