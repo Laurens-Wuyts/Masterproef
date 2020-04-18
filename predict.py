@@ -21,7 +21,7 @@ DATA_PATH = args["path"] + "Data/"
 infoPrint.startTime = datetime.now()
 
 infoPrint("loading images...")
-test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
+test_len, test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
 for i, d in test_ds:
 	color_inp = i.numpy()
 	depth_inp = d.numpy()

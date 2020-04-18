@@ -34,8 +34,8 @@ infoPrint.startTime = datetime.now()
 
 # Load the training and testing data in two separate TensorFlow datasets
 infoPrint("Loading training and testing data...")
-train_ds = Load_Dataset(args.path[0] + "/preprocessed/Train/color", args.batch_size)
-test_ds  = Load_Dataset(args.path[0] + "/preprocessed/Test/color",  args.batch_size)
+train_len, train_ds = Load_Dataset(args.path[0] + "/preprocessed/Train/color", args.batch_size)
+test_len,  test_ds  = Load_Dataset(args.path[0] + "/preprocessed/Test/color",  args.batch_size)
 
 # Build the layers of the network
 infoPrint("Building model...")
@@ -53,20 +53,18 @@ tensorboard_callback = TensorBoard(log_dir=logdir )					# Define the TensorBoard
 earlystop_callback   = EarlyStopping( monitor="val_loss", patience=15 )	# Define EarlyStopping callback to make sure the network stops when it stagnates.
 checkpoint_callback  = ModelCheckpoint(								# Define a checkpoint callback, mostly for running in Colab and being disconnected
 	"checkpoints/{epoch}-fast-depth-cp.h5", 
-	monitor= "val_loss", 		# Monitor the validation loss
-	save_weights_only = True,	# Only save the weights of the network, not the whole model
-	mode   = "min",				# The loss should be lower to be better
-	period = 10 )				# Save every 10 epochs
+	save_weights_only = True,		# Only save the weights of the network, not the whole model
+	save_freq = 10 * train_len )	# Save every 10 epochs (when 10x all data has passed thourgh the network)
 
 # Fit the model to the training data
 H = model.fit(
-	x 				= train_ds,		# The dataset with the training images
-	validation_data	= test_ds,		# The dataset with the validation images
-	validation_steps= 20,			# Validate 20 batches per epoch
-	epochs 			= args.epochs,	# Run for a maximum of args.epochs
-	steps_per_epoch = 318,			# Run 318 batches of data every epoch
-	verbose 		= 1,			# Print a lot of debug info
-	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])	# Load al the different callbacks
+	x 				= train_ds,						# The dataset with the training images
+	validation_data	= test_ds,						# The dataset with the validation images
+	validation_steps= test_len // args.batch_size,	# Validate x batches per epoch so that all testing data is passed through the network
+	epochs 			= args.epochs,					# Run for a maximum of args.epochs
+	steps_per_epoch = train_len // args.batch_size,	# Run x batches of data every epoch so that all data in the dataset has passed
+	verbose 		= 1,							# Print a progress bar for every epoch
+	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])	# Load all the different callbacks
 
 # Save the network for later use
 infoPrint("Serializing network to '{}'...".format("output/FastDepth.model"))

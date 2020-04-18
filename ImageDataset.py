@@ -73,7 +73,7 @@ def Load_Dataset(path, batch_size):
 	# folder = pathlib.Path("/home/laurens/masterproef/Data/Realsense_Dataset/preprocessed/Train/color/")
 	folder = pathlib.Path(path)
 	list_ds = tf.data.Dataset.list_files(str(folder/'*'))
-	return prepare_for_training(list_ds, batch_size=batch_size)
+	return len(list(folder.glob("*.jpg"))), prepare_for_training(list_ds, batch_size=batch_size)
 
 def Load_Dummy_Dataset(path, file, batch_size):
 	folder = pathlib.Path(path)
