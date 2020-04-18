@@ -10,7 +10,7 @@ from multiprocessing import cpu_count
 
 import matplotlib.pyplot as plt
 
-directory = sys.argv[1] + 'Data/' + sys.argv[2] + "/"
+directory = sys.argv[1]
 preprocessedDir = directory + "preprocessed/"
 
 def removeBlack(img):

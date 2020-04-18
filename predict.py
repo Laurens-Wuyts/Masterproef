@@ -11,23 +11,24 @@ from utils import infoPrint
 from datetime import datetime
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--path",    required=True, help="path to root of project")
-ap.add_argument("-m", "--model",   required=True, help="path to pre-trained network")
-ap.add_argument("-d", "--dataset", required=True, help="path to preprocessed dataset")
-args = vars(ap.parse_args())
-
-DATA_PATH = args["path"] + "Data/"
+ap.add_argument("-m", "--model",   	required=True,	help="Path to pre-trained network")
+ap.add_argument("-d", "--dataset", 	required=True,	help="Path to preprocessed dataset")
+ap.add_argument("-b", "--batch",	required=False, help="Number of images to predict", default=5, type=int)
+args, _ = ap.parse_known_args()
 
 infoPrint.startTime = datetime.now()
 
 infoPrint("loading images...")
-test_len, test_ds  = Load_Dataset(DATA_PATH + args["dataset"] + "/preprocessed/Test/color", 5).take(1)
-for i, d in test_ds:
-	color_inp = i.numpy()
-	depth_inp = d.numpy()
+test_len, test_ds  = Load_Dataset(args.dataset + "/preprocessed/Test/color", args.batch).take(1)
+
+color_inp, depth_inp = [i.numpy(), d.numpy() for i, d in test_ds]
+
+#for i, d in test_ds:
+	#color_inp = i.numpy()
+	#depth_inp = d.numpy()
 
 infoPrint("loading model...")
-model = load_model(args["model"])
+model = load_model(args.model)
 
 infoPrint("predicting...")
 preds = model.predict(color_inp)
@@ -48,4 +49,4 @@ for idx in range(len(color_inp)):
 	else:
 		image = np.vstack((image, temp))
 
-cv2.imwrite(DATA_PATH + "predictions.jpg", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+cv2.imwrite(args.dataset + "predictions.jpg", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
