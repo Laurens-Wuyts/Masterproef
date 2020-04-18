@@ -55,7 +55,7 @@ earlystop_callback   = EarlyStopping( monitor="val_loss", patience=15 )	# Define
 checkpoint_callback  = ModelCheckpoint(								# Define a checkpoint callback, mostly for running in Colab and being disconnected
 	"checkpoints/{epoch}-fast-depth-cp.h5", 
 	save_weights_only = True,		# Only save the weights of the network, not the whole model
-	save_freq = 10 * train_len )	# Save every 10 epochs (when 10x all data has passed through the network)
+	save_freq = 10 * (train_len // args.batch_size))	# Save every 10 epochs (when 10x all data has passed through the network)
 
 # Fit the model to the training data
 H = model.fit(
