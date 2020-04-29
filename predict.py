@@ -41,8 +41,8 @@ for idx in range(len(color_inp)):
 	tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
 	tmp_d    = np.stack((np.squeeze(tmp_d),)*3, axis=-1)
 
-	tmp_pred = cv2.applyColorMap(tmp_pred, cv2.COLORMAP_PLASMA)
-	tmp_d    = cv2.applyColorMap(tmp_d, cv2.COLORMAP_PLASMA)
+	#tmp_pred = cv2.applyColorMap(tmp_pred, cv2.COLORMAP_PLASMA)
+	#tmp_d    = cv2.applyColorMap(tmp_d, cv2.COLORMAP_PLASMA)
 
 	temp = np.hstack((tmp_i, tmp_d, tmp_pred))
 	if image is None:
