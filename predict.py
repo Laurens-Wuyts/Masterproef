@@ -38,8 +38,8 @@ for idx in range(len(color_inp)):
 	tmp_pred = tf.image.convert_image_dtype(preds[idx], tf.uint8)
 	tmp_d    = tf.image.convert_image_dtype(depth_inp[idx], tf.uint8)
 	tmp_i    = tf.image.convert_image_dtype(color_inp[idx], tf.uint8)
-	#tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
-	#tmp_d    = np.stack((np.squeeze(tmp_d),)*3, axis=-1)
+	tmp_pred = np.stack((np.squeeze(tmp_pred),)*3, axis=-1)
+	tmp_d    = np.stack((np.squeeze(tmp_d),)*3, axis=-1)
 
 	tmp_pred = cv2.applyColorMap(tmp_pred, cv2.COLORMAP_PLASMA)
 	tmp_d    = cv2.applyColorMap(tmp_d, cv2.COLORMAP_PLASMA)
