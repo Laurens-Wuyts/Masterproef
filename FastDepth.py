@@ -48,7 +48,7 @@ sgd = SGD(lr=args.learning_rate, decay=1e-4, momentum=0.9, nesterov=True)
 model.compile(loss="mae", optimizer=sgd, metrics=["accuracy"]) # mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
 
 startEpoch = 0
-if checkpoint is not None:
+if args.checkpoint is not None:
 	infoPrint("Loading checkpoint...")
 	model.load_weights(args.checkpoint)
 	startEpoch = int(args.checkpoint.strip("-")[0])
