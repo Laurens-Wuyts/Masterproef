@@ -51,7 +51,7 @@ startEpoch = 0
 if args.checkpoint is not None:
 	infoPrint("Loading checkpoint...")
 	model.load_weights(args.checkpoint)
-	startEpoch = int(args.checkpoint.strip("-")[0])
+	startEpoch = int(args.checkpoint.split("-")[0].split("/")[1])
 	infoPrint("Starting from epoch {}".format(startEpoch))
 
 # Training of the actual network
