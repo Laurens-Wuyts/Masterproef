@@ -27,7 +27,7 @@ ap.add_argument("-o", "--output", 	 	required=False, help="Path to save the mode
 ap.add_argument("-b", "--batch_size",   required=False, help="Size of a batch", 		 	default=64,	type=int)
 ap.add_argument("-e", "--epochs",  		required=False, help="Maximum number of epochs", 	default=200,	type=int)
 ap.add_argument("-l", "--learning_rate",required=False, help="Learning rate of the network",default=0.001,	type=float)
-ap.add_argument("-c", "--checkpoint",  	required=False, help="Start from checkpoint",	 	default="0",	const="1",	nargs="?")
+ap.add_argument("-c", "--checkpoint",  	required=False, help="Start from checkpoint")
 args, _ = ap.parse_known_args()
 
 # Initialise the start time of the debug messages
@@ -47,6 +47,13 @@ infoPrint("Compiling model...")
 sgd = SGD(lr=args.learning_rate, decay=1e-4, momentum=0.9, nesterov=True)
 model.compile(loss="mae", optimizer=sgd, metrics=["accuracy"]) # mae = Mean absolute Error = L1 Loss  mean(abs(T - P))
 
+startEpoch = 0
+if checkpoint is not None:
+	infoPrint("Loading checkpoint...")
+	model.load_weights(args.checkpoint)
+	startEpoch = int(args.checkpoint.strip("-")[0])
+	infoPrint("Starting from epoch {}".format(startEpoch))
+
 # Training of the actual network
 infoPrint("Training network...")
 logdir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")		# Directory where to save the TensorBoard logs to.
@@ -62,6 +69,7 @@ H = model.fit(
 	x 				= train_ds,						# The dataset with the training images
 	validation_data	= test_ds,						# The dataset with the validation images
 	validation_steps= test_len // args.batch_size,	# Validate x batches per epoch so that all testing data is passed through the network
+	initial_epoch	= startEpoch,					# When starting from a checkpoint do only the remaining epochs
 	epochs 			= args.epochs,					# Run for a maximum of args.epochs
 	steps_per_epoch = train_len // args.batch_size,	# Run x batches of data every epoch so that all data in the dataset has passed
 	verbose 		= 1,							# Print a progress bar for every epoch
