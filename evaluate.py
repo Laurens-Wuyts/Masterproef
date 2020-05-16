@@ -21,6 +21,7 @@ infoPrint("loading images...")
 _, test_ds  = Load_Dataset(args.dataset + "/preprocessed/Test/color", args.batch)
 
 for i, d in test_ds.take(1):
+	color_inp = i.numpy()
 	depth_inp = d.numpy()
 
 infoPrint("loading model...")
