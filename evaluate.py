@@ -66,11 +66,11 @@ for idx in range(len(color_inp)):
 			if tmp < thr_2:	cnt_2 += 1
 			if tmp < thr_3:	cnt_3 += 1
 
-			sum_sq += ((d[y][x] - p[y][x]) ** 2)
+			sum_sq +=( ((d[y][x] - p[y][x]) ** 2) / n)
 	delta_1 = cnt_1 / n
 	delta_2 = cnt_2 / n
 	delta_3 = cnt_3 / n
-	sum_rt  = math.sqrt(sum_sq / n)
+	sum_rt  = math.sqrt(sum_sq)
 
 	if delta_1 > max_delta_1: max_delta_1 = delta_1
 	if delta_2 > max_delta_2: max_delta_2 = delta_2
