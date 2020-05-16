@@ -46,8 +46,8 @@ for idx in range(len(color_inp)):
 	p = np.squeeze(tf.image.convert_image_dtype(preds[idx], tf.uint8))
 	d = np.squeeze(tf.image.convert_image_dtype(depth_inp[idx], tf.uint8))
 
-	w = tmp_d.shape[0]
-	h = tmp_d.shape[1]
+	w = d.shape[0]
+	h = d.shape[1]
 	for y in range(h):
 		for x in range(w):
 			tmp = max(p[y][x] / d[y][x], d[y][x] / p[y][x])
