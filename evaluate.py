@@ -33,14 +33,12 @@ preds = model.predict(color_inp)
 max_delta_1 = 0
 max_delta_2 = 0
 max_delta_3 = 0
+min_sq      = 0
+
 
 thr_1 = 1.25
 thr_2 = 1.5625
 thr_3 = 1.953125
-
-cnt_1 = 0
-cnt_2 = 0
-cnt_3 = 0
 
 for idx in range(len(color_inp)):
 	p = np.squeeze(tf.image.convert_image_dtype(preds[idx], tf.uint8))
@@ -48,6 +46,13 @@ for idx in range(len(color_inp)):
 
 	w = d.shape[0]
 	h = d.shape[1]
+
+	cnt_1 = 0
+	cnt_2 = 0
+	cnt_3 = 0
+
+	n = w * h
+	sum_sq = 0
 	for y in range(h):
 		for x in range(w):
 			tmp = 0
@@ -58,21 +63,22 @@ for idx in range(len(color_inp)):
 			if tmp < thr_1:	cnt_1 += 1
 			if tmp < thr_2:	cnt_2 += 1
 			if tmp < thr_3:	cnt_3 += 1
-	delta_1 = cnt_1 / (w * h)
-	delta_2 = cnt_2 / (w * h)
-	delta_3 = cnt_3 / (w * h)
+
+			sum_sq += ((d[y][x] - p[y][x]) ** 2)
+	delta_1 = cnt_1 / n
+	delta_2 = cnt_2 / n
+	delta_3 = cnt_3 / n
+	sum_rt  = sqrt(sum_sq / n)
 
 	if delta_1 > max_delta_1: max_delta_1 = delta_1
 	if delta_2 > max_delta_2: max_delta_2 = delta_2
 	if delta_3 > max_delta_3: max_delta_3 = delta_3
-
-	cnt_1 = 0
-	cnt_2 = 0
-	cnt_3 = 0
+	if sum_rt  < min_sq     : min_sq      = sum_rt
 
 print("Delta 1: {}".format(max_delta_1))
 print("Delta 2: {}".format(max_delta_2))
 print("Delta 3: {}".format(max_delta_3))
+print("RMSE   : {}".format(min_sq))
 
 
 				
