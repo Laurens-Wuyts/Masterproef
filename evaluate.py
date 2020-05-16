@@ -50,6 +50,8 @@ for idx in range(len(color_inp)):
 	h = d.shape[1]
 	for y in range(h):
 		for x in range(w):
+			if p[y][x] == 0:	p[y][x] = 1
+			if d[y][x] == 0:	d[y][x] = 1
 			tmp = max(p[y][x] / d[y][x], d[y][x] / p[y][x])
 			if tmp < thr_1:	cnt_1 += 1
 			if tmp < thr_2:	cnt_2 += 1
