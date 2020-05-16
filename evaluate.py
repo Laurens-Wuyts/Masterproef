@@ -58,11 +58,13 @@ for idx in range(len(color_inp)):
 	delta_2 = cnt_2 / (w * h)
 	delta_3 = cnt_3 / (w * h)
 
-	print(w, h, cnt_1, delta_1)
-
 	if delta_1 > max_delta_1: max_delta_1 = delta_1
 	if delta_2 > max_delta_2: max_delta_2 = delta_2
 	if delta_3 > max_delta_3: max_delta_3 = delta_3
+
+	cnt_1 = 0
+	cnt_2 = 0
+	cnt_3 = 0
 
 print("Delta 1: {}".format(max_delta_1))
 print("Delta 2: {}".format(max_delta_2))
