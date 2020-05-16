@@ -76,5 +76,5 @@ H = model.fit(
 	callbacks 		= [tensorboard_callback, checkpoint_callback, earlystop_callback])	# Load all the different callbacks
 
 # Save the network for later use
-infoPrint("Serializing network to '{}'...".format("output/FastDepth.model"))
+infoPrint("Serializing network to '{}'...".format(args.output))
 model.save("output/" + args.output)
