@@ -9,6 +9,8 @@ from utils import infoPrint
 
 from datetime import datetime
 
+import math
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model",   	required=True,	help="Path to trained network")
 ap.add_argument("-d", "--dataset", 	required=True,	help="Path to preprocessed dataset")
@@ -68,7 +70,7 @@ for idx in range(len(color_inp)):
 	delta_1 = cnt_1 / n
 	delta_2 = cnt_2 / n
 	delta_3 = cnt_3 / n
-	sum_rt  = sqrt(sum_sq / n)
+	sum_rt  = math.sqrt(sum_sq / n)
 
 	if delta_1 > max_delta_1: max_delta_1 = delta_1
 	if delta_2 > max_delta_2: max_delta_2 = delta_2
