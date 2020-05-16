@@ -35,7 +35,7 @@ preds = model.predict(color_inp)
 max_delta_1 = 0
 max_delta_2 = 0
 max_delta_3 = 0
-min_sq      = 0
+min_sq      = None
 
 
 thr_1 = 1.25
@@ -75,7 +75,7 @@ for idx in range(len(color_inp)):
 	if delta_1 > max_delta_1: max_delta_1 = delta_1
 	if delta_2 > max_delta_2: max_delta_2 = delta_2
 	if delta_3 > max_delta_3: max_delta_3 = delta_3
-	if sum_rt  < min_sq     : min_sq      = sum_rt
+	if sum_rt is None or sum_rt  < min_sq     : min_sq      = sum_rt
 
 print("Delta 1: {}".format(max_delta_1))
 print("Delta 2: {}".format(max_delta_2))
