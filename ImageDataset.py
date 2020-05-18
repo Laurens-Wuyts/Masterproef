@@ -5,6 +5,7 @@ import pathlib
 import matplotlib.pyplot as plt
 
 import time
+import random
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
@@ -22,10 +23,12 @@ def process_path(path):
 	depth_path = get_depth_path(path)
 	img = tf.io.read_file(path)
 	img = decode_image(img, 3)
-	img = tf.image.random_flip_left_right(img)
 	dep = tf.io.read_file(depth_path)
 	dep = decode_image(dep, 1)
-	dep = tf.image.random_flip_left_right(dep)
+
+	if bool(random.getrandbits(1)):
+		img = tf.image.flip_left_right(img)
+		dep = tf.image.flip_left_right(dep)
 
 	return img, dep
 
